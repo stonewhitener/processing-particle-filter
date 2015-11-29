@@ -56,7 +56,7 @@ abstract class AbstractParticleFilter {
   private void init(PImage image) {
     Particle maxParticle = new Particle(0, 0, 0.0);
     //----------------------------------------------------------------
-    //println("image size: " + image.width + ", " + image.height);
+    println("image size: " + image.width + ", " + image.height);
     //----------------------------------------------------------------
     for (int j = 0; j < image.height; j++) {
       for (int i = 0; i < image.width; i++) {
@@ -68,8 +68,8 @@ abstract class AbstractParticleFilter {
     }
 
     //----------------------------------------------------------------
-    //println("max weight: " + maxParticle.weight);
-    //println("at (" + maxParticle.x + ", " + maxParticle.y + ")");
+    println("max weight: " + maxParticle.weight);
+    println("at (" + maxParticle.x + ", " + maxParticle.y + ")");
     //----------------------------------------------------------------
 
     for (int i = 0; i < particles.size(); i++) {
@@ -100,7 +100,7 @@ abstract class AbstractParticleFilter {
   }
 
   private void predict() {
-    final double variance = 13.0;
+    final double variance = 2.0;
 
     for (int i = 0; i < particles.size(); i++) {
       double vx = random.nextGaussian() * variance;
@@ -113,7 +113,7 @@ abstract class AbstractParticleFilter {
       particles.get(i).y += (int) vy;
 
       //----------------------------------------------------------------
-      //println("p[" + i + "] + v[" + i + "] = (" + particles.get(i).x + ", " + particles.get(i).y + ")");
+      println("p[" + i + "] = (" + particles.get(i).x + ", " + particles.get(i).y + ")");
       //----------------------------------------------------------------
     }
   }
@@ -127,6 +127,7 @@ abstract class AbstractParticleFilter {
 
     for (int i = 0; i < particles.size(); i++) {
       particles.get(i).weight = (particles.get(i).weight / sumWeight) * particles.size();
+      println("p[" + i + "].weight = " + particles.get(i).weight);
     }
   }
 

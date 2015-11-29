@@ -1,21 +1,26 @@
+import processing.video.*;
+
 ParticleFilter particleFilter;
-PImage image;
-boolean isFirstFrame;
+
+Movie movie;
 
 void setup() {
-  size(768, 576);
 
-  isFirstFrame = true;
-
-  image = loadImage("test-0000308.jpg");
-  particleFilter = new ParticleFilter(500, image);
+  movie.loop();
+  
+  // Initialize with first frame
+  movie.read();
 }
 
 
 void draw() {
-  image(image, 0, 0, 768, 576);
+  image(movie, 0, 0);
   
-  particleFilter.update(image);
+  particleFilter.update(movie);
   particleFilter.drawParticles();
   particleFilter.drawRectangle();
+}
+
+void movieEvent(Movie m){
+    m.read();
 }
