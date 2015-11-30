@@ -20,8 +20,8 @@ void draw() {
   image(movie, 0, 0);
   
   particleFilter.update(movie);
-  particleFilter.drawParticles();
-  particleFilter.drawRectangle();
+  particleFilter.drawParticles(color(255, 0, 0), 2);
+  particleFilter.drawRectangle(color(255, 0, 0), 4, 30, 30);
 }
 
 void movieEvent(Movie m){

@@ -24,28 +24,25 @@ abstract class AbstractParticleFilter {
     weight(image);
   }
 
-  public void drawParticles() {
-    stroke(#ff0000);
-    strokeWeight(2);
+  public void drawParticles(color c, int weight) {
+    stroke(c);
+    strokeWeight(weight);
 
     for (int i = 0; i < particles.size(); i++) {
       point(particles.get(i).x, particles.get(i).y);
     }
   }
 
-  public void drawRectangle() {
+  public void drawRectangle(color c, int weight, int width, int height) {
     Particle result = measure();
-
-    final int width = 30;
-    final int height = 30;
 
     final int top = result.y - height / 2;
     final int bottom = result.y + height / 2;
     final int left = result.x - width / 2;
     final int right = result.x + width / 2;
 
-    stroke(#ff0000);
-    strokeWeight(4);
+    stroke(c);
+    strokeWeight(weight);
 
     line(left, top, right, top);
     line(left, bottom, right, bottom);
@@ -127,7 +124,9 @@ abstract class AbstractParticleFilter {
 
     for (int i = 0; i < particles.size(); i++) {
       particles.get(i).weight = (particles.get(i).weight / sumWeight) * particles.size();
+      //----------------------------------------------------------------
       println("p[" + i + "].weight = " + particles.get(i).weight);
+      //----------------------------------------------------------------
     }
   }
 
