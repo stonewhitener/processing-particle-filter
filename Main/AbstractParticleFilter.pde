@@ -20,7 +20,7 @@ abstract class AbstractParticleFilter {
 
   public void update(PImage image) {
     resample();
-    predict();
+    predict(image);
     weight(image);
   }
 
@@ -51,10 +51,10 @@ abstract class AbstractParticleFilter {
   }
 
   private void init(PImage image) {
+    //----------------------------------------------------------------
+    //println("image size: " + image.width + ", " + image.height);
+    //----------------------------------------------------------------
     Particle maxParticle = new Particle(0, 0, 0.0);
-    //----------------------------------------------------------------
-    println("image size: " + image.width + ", " + image.height);
-    //----------------------------------------------------------------
     for (int j = 0; j < image.height; j++) {
       for (int i = 0; i < image.width; i++) {
         double weight = likelihood(i, j, image);
@@ -65,8 +65,8 @@ abstract class AbstractParticleFilter {
     }
 
     //----------------------------------------------------------------
-    println("max weight: " + maxParticle.weight);
-    println("at (" + maxParticle.x + ", " + maxParticle.y + ")");
+    //println("max weight: " + maxParticle.weight);
+    //println("at (" + maxParticle.x + ", " + maxParticle.y + ")");
     //----------------------------------------------------------------
 
     for (int i = 0; i < particles.size(); i++) {
@@ -84,20 +84,20 @@ abstract class AbstractParticleFilter {
 
     List<Particle> tmpParticles = new ArrayList<Particle>();
     for (int i = 0; i < particles.size(); i++) {
-      tmpParticles.add(new Particle(particles.get(i).x, particles.get(i).y, particles.get(i).weight));
+      tmpParticles.add(particles.get(i).clone());
     }
 
     for (int i = 0; i < particles.size(); i++) {
       double weight = random.nextDouble() * weights.get(weights.size() - 1);
       int n = 0;
       while (weights.get(++n) < weight);
-      particles.set(i, tmpParticles.get(n));
+      particles.set(i, tmpParticles.get(n).clone());
       particles.get(i).weight = 1.0;
     }
   }
 
-  private void predict() {
-    final double variance = 2.0;
+  private void predict(PImage image) {
+    final double variance = 13.0;
 
     for (int i = 0; i < particles.size(); i++) {
       double vx = random.nextGaussian() * variance;
@@ -109,8 +109,20 @@ abstract class AbstractParticleFilter {
       particles.get(i).x += (int) vx;
       particles.get(i).y += (int) vy;
 
+      if (particles.get(i).x < 0) {
+        particles.get(i).x = 0;
+      } else if (particles.get(i).x > image.width - 1) {
+        particles.get(i).x = image.width - 1;
+      }
+
+      if (particles.get(i).y < 0) {
+        particles.get(i).y = 0;
+      } else if (particles.get(i).y > image.height - 1) {
+        particles.get(i).y = image.height - 1;
+      }
+
       //----------------------------------------------------------------
-      println("p[" + i + "] = (" + particles.get(i).x + ", " + particles.get(i).y + ")");
+      //println("p[" + i + "] = (" + particles.get(i).x + ", " + particles.get(i).y + ")");
       //----------------------------------------------------------------
     }
   }
@@ -123,9 +135,9 @@ abstract class AbstractParticleFilter {
     }
 
     for (int i = 0; i < particles.size(); i++) {
-      particles.get(i).weight = (particles.get(i).weight / sumWeight) * particles.size();
+      particles.get(i).weight /= sumWeight;
       //----------------------------------------------------------------
-      println("p[" + i + "].weight = " + particles.get(i).weight);
+      //println("p[" + i + "].weight = " + particles.get(i).weight);
       //----------------------------------------------------------------
     }
   }
