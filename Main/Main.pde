@@ -12,7 +12,7 @@ void setup() {
 
   // Initialize with first frame
   movie.read();
-  particleFilter = new ParticleFilter(500, movie);
+  particleFilter = new ParticleFilter(500, 13.0, movie);
 }
 
 

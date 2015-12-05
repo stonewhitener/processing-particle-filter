@@ -3,14 +3,21 @@ import java.util.*;
 abstract class AbstractParticleFilter {
   private List<Particle> particles;
   private Random random;
-
-  public AbstractParticleFilter(int n, PImage initImage) {
-    particles = new ArrayList<Particle>();
+  private double variance;
+  
+  /**
+   * @param n number of particles
+   * @param variance variance of gaussian random
+   * @param initImage image for deciding initialize particles position
+   */
+  public AbstractParticleFilter(int n, double variance, PImage initImage) {
+    this.particles = new ArrayList<Particle>();
     for (int i = 0; i < n; i++) {
-      particles.add(new Particle(0, 0, 0.0));
+      this.particles.add(new Particle(0, 0, 0.0));
     }
-
-    random = new Random(System.currentTimeMillis());
+    
+    this.variance = variance;
+    this.random = new Random(System.currentTimeMillis());
 
     init(initImage);
   }
@@ -97,8 +104,6 @@ abstract class AbstractParticleFilter {
   }
 
   private void predict(PImage image) {
-    final double variance = 13.0;
-
     for (int i = 0; i < particles.size(); i++) {
       double vx = random.nextGaussian() * variance;
       double vy = random.nextGaussian() * variance;
