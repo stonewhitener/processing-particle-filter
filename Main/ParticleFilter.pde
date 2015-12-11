@@ -3,6 +3,10 @@ class ParticleFilter extends AbstractParticleFilter {
   public ParticleFilter(int n, double variance, PImage initImage) {
     super(n, variance, initImage);
   }
+  
+  public ParticleFilter(int n, double variance, int x, int y) {
+    super(n, variance, x, y);
+  }
 
   @Override
   protected double likelihood(int x, int y, PImage image) {
