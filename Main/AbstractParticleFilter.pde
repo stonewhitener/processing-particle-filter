@@ -21,6 +21,22 @@ abstract class AbstractParticleFilter {
 
     init(initImage);
   }
+  
+  /**
+   * @param n number of particles
+   * @param variance variance of gaussian random
+   * @param x initial position of particles
+   * @param y initial position of particles
+   */
+  public AbstractParticleFilter(int n, double variance, int x, int y) {
+    this.particles = new ArrayList<Particle>();
+    for (int i = 0; i < n; i++) {
+      this.particles.add(new Particle(x, y, 0.0));
+    }
+    
+    this.variance = variance;
+    this.random = new Random(System.currentTimeMillis());
+  }
 
   // Implement this method
   abstract protected double likelihood(int x, int y, PImage image);
