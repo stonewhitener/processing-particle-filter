@@ -1,4 +1,4 @@
-class Particle {
+final class Particle {
   public int x;
   public int y;
   public double weight;
