@@ -1,5 +1,4 @@
-class ParticleFilter extends AbstractParticleFilter {
-
+final class ParticleFilter extends AbstractParticleFilter {
   public ParticleFilter(int n, double variance, PImage initImage) {
     super(n, variance, initImage);
   }
