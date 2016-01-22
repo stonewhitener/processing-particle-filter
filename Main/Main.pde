@@ -2,28 +2,43 @@ import processing.video.*;
 
 ParticleFilter particleFilter;
 
-Movie movie;
+Capture cam;
 
 void setup() {
-  size(352, 240);
+  size(1280, 720);
 
-  movie = new Movie(this, "input.mpg");
-  movie.loop();
+  String[] cameras = Capture.list();
+  
+  if (cameras.length == 0) {
+    println("There are no cameras available for capture.");
+    exit();
+  } else {
+    println("Available cameras:");
+    for (int i = 0; i < cameras.length; i++) {
+      println(cameras[i]);
+    }
+    
+    // The camera can be initialized directly using an 
+    // element from the array returned by list():
+    cam = new Capture(this, cameras[0]);
+    cam.start();     
+  }  
 
   // Initialize with first frame
-  movie.read();
-  particleFilter = new ParticleFilter(500, 13.0, movie);
+  cam.read();
+  particleFilter = new ParticleFilter(1000, 13.0, cam);
 }
 
 
 void draw() {
-  image(movie, 0, 0);
+  if (cam.available() == true) {
+    cam.read();
+  }
+  
+  image(cam, 0, 0);
 
-  particleFilter.update(movie);
+  particleFilter.update(cam);
   particleFilter.drawParticles(color(255, 0, 0), 2);
   particleFilter.drawRectangle(color(255, 0, 0), 2, 30, 30);
 }
 
-void movieEvent(Movie m) {
-  m.read();
-}
